@@ -1,57 +1,13 @@
-version: "2"
+version: '3.5'
 services:
-  mongo1:
-    hostname: mongodb
-    container_name: mongodb
-    image: docker-registry.sabay.com/docker/mongodb:latest
-    ports:
-      - 27017:27017
+  mosquitto:
+    container_name: mosquitto
+    hostname: localhost
+    image: eclipse-mosquitto:1.6.14
     restart: always
-    volumes:
-      - ./mongo1/data:/data/db
-    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
-    networks:
-      - sabay_docker
-
-  mongo2:
-    hostname: mongodb2
-    container_name: mongodb2
-    image: docker-registry.sabay.com/docker/mongodb:latest
     ports:
-      - 27018:27017
-    restart: always
-    volumes:
-      - ./mongo2/data:/data/db
-    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
-    networks:
-      - sabay_docker
-
-  mongo3:
-    hostname: mongodb3
-    container_name: mongodb3
-    image: docker-registry.sabay.com/docker/mongodb:latest
-    ports:
-      - 27019:27017
-    restart: always
-    volumes:
-      - ./mongo3/data:/data/db
-    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
-    networks:
-      - sabay_docker
-
-  mongosetup:
-    image: docker-registry.sabay.com/docker/mongodb:latest
-    depends_on:
-      - mongo1
-      - mongo2
-      - mongo3
-    volumes:
-      - ./scripts:/scripts
-    restart: "no"
-    entrypoint: ["bash", "/scripts/mongo_setup.sh"]
-    networks:
-      - sabay_docker
-
+       - "1883:1883"
+       - "9001:9001"
 networks:
-  sabay_docker:
+  webnet:
     external: true
